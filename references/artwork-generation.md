@@ -25,7 +25,9 @@ Start from a fresh generation for every new phrase or new project application un
 
 Generate once during implementation and ship the selected files with the site. Do not call an image model on hover, page load, or every refresh; runtime generation makes the interaction slow, costly, and visually inconsistent.
 
-For a short phrase, an exact equal-cell atlas is efficient when the available tooling can crop it deterministically. Specify the grid dimensions, exact reading order, and one isolated glyph per cell. Otherwise generate one transparent image per occurrence.
+For a short phrase, prefer one batch generation as an exact equal-cell atlas when the available tooling can crop it deterministically. Specify the grid dimensions, exact reading order, and one isolated glyph per cell. Avoid launching one image-generation request per character during the first pass. When an atlas is unsuitable, use the smallest number of batch requests the tool supports.
+
+Keep the first pass bounded. Make one complete batch, inspect it, and integrate a usable draft. If the batch has malformed glyphs, make at most one corrected full-batch retry; after that, regenerate only the failed occurrence IDs. Do not repeatedly regenerate the whole phrase while trying to reach an unrequested idea of perfection. If the generation tool fails, remains unavailable, or returns no usable output after the corrected retry, report that blocker and preserve completed code and assets.
 
 Prompt pattern:
 

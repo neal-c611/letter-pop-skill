@@ -67,6 +67,8 @@ git clone https://github.com/neal-c611/letter-pop-skill.git \
 
 重启 WorkBuddy 或新建一个对话，然后使用 `/skills` 确认 `letter-pop` 已加载。
 
+需要生成新字形时，请确认 WorkBuddy 的 `ImageGen` 工具已经启用，并允许它提出的工具授权。Kimi-K3 的视觉能力可以理解图片，实际生成图片由独立的 `ImageGen` 工具完成。Letter Pop 现在会在长任务开始前检查这项能力，并用一次批量生成完成首稿，避免每个字分别调用一次生图。
+
 ### 不使用 Git 下载
 
 下载仓库 ZIP：

@@ -21,6 +21,12 @@ When the exact text occurs once, locate it in source and rendered DOM without as
 
 Inspect repository instructions and the existing stack before choosing an implementation. Capture the target's baseline appearance when a runnable page is available, including font family, size, weight, line height, letter spacing, color, width, wrapping, and relevant breakpoints.
 
+## Check capabilities before starting
+
+When new artwork is required, confirm that the current host exposes a working image-generation tool before starting implementation. Image understanding alone is not image generation. If generation is disabled, unavailable, or waiting for permission, surface that condition immediately instead of searching for unofficial substitutes, installing unrelated tools, or repeatedly retrying. Continue with existing or user-provided assets when available; otherwise explain the missing capability before doing long-running work.
+
+Give a short progress update when the task enters artwork generation, frontend integration, and browser verification. A pending tool call must not become a silent wait.
+
 ## Build the character plan
 
 Segment text into grapheme clusters rather than code points. In JavaScript, prefer `Intl.Segmenter` with grapheme granularity and provide a safe fallback. Treat repeated characters as separate occurrences so they may use different artwork.

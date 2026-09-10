@@ -67,6 +67,8 @@ git clone https://github.com/neal-c611/letter-pop-skill.git \
 
 Restart or open a new WorkBuddy conversation, then use `/skills` to confirm that `letter-pop` is loaded.
 
+When the phrase needs new artwork, make sure WorkBuddy's `ImageGen` tool is enabled and approve its tool request. Kimi-K3's visual capability can understand images, while generation is provided by the separate `ImageGen` tool. Letter Pop now checks this capability before beginning a long run and uses a batched first draft rather than one generation call per character.
+
 ### Download without Git
 
 Download the repository ZIP:
