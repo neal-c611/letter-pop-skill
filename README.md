@@ -4,6 +4,14 @@ An agent skill for turning a specific text fragment on an existing webpage into 
 
 The workflow was derived from the interaction pattern used in OpenAI's ChatGPT Images 2.5 launch page, then generalized for existing React, Next.js, Vue, Svelte, and vanilla frontends.
 
+## Live demos
+
+Try the hover, tap, and keyboard interactions on the [live demo page](https://neal-c611.github.io/letter-pop-skill/). The same artwork is shown inside three different typographic contexts to demonstrate that Letter Pop inherits the host page's font.
+
+| Sans / mixed script | Editorial serif | Compact CJK |
+| --- | --- | --- |
+| [![Sans demo showing Hello, 我是Neal](docs/previews/demo-sans.png)](https://neal-c611.github.io/letter-pop-skill/#sans) | [![Serif demo showing Hello, Neal](docs/previews/demo-serif.png)](https://neal-c611.github.io/letter-pop-skill/#serif) | [![Compact demo showing 我是Neal](docs/previews/demo-compact.png)](https://neal-c611.github.io/letter-pop-skill/#compact) |
+
 ## What it handles
 
 - Finds the requested text in an existing codebase and changes only that rendered occurrence.

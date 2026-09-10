@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Three interactive examples made with the Letter Pop agent skill."
+    />
+    <title>Letter Pop — Interactive demos</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="Letter Pop demos">
+        <span class="brand-mark" aria-hidden="true">LP</span>
+        <span>Letter Pop</span>
+      </a>
+      <nav aria-label="Demo navigation">
+        <a href="#sans">Sans</a>
+        <a href="#serif">Serif</a>
+        <a href="#compact">Compact</a>
+        <a href="https://github.com/neal-c611/letter-pop-skill">GitHub ↗</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section id="sans" class="demo demo-sans" aria-labelledby="sans-label">
+        <div class="demo-meta">
+          <p id="sans-label">Demo 01 / Sans</p>
+          <button type="button" data-play="sans-stage">Play sequence</button>
+        </div>
+        <h1 class="sans-heading">
+          <span
+            id="sans-stage"
+            class="letter-pop"
+            data-text="Hello, 我是Neal"
+            tabindex="0"
+            aria-label="Hello, 我是Neal"
+          ></span>
+        </h1>
+        <p class="demo-hint">Hover a character · tap on touch · focus with Tab</p>
+      </section>
+
+      <section id="serif" class="demo demo-serif" aria-labelledby="serif-label">
+        <div class="demo-meta">
+          <p id="serif-label">Demo 02 / Editorial serif</p>
+          <button type="button" data-play="serif-stage">Play sequence</button>
+        </div>
+        <p class="eyebrow">A small study in tactile type</p>
+        <h2 class="serif-heading">
+          <span
+            id="serif-stage"
+            class="letter-pop"
+            data-text="Hello, Neal"
+            tabindex="0"
+            aria-label="Hello, Neal"
+          ></span>
+        </h2>
+        <p class="serif-note">
+          The artwork stays the same. The resting letters inherit this section’s serif type.
+        </p>
+      </section>
+
+      <section id="compact" class="demo demo-compact" aria-labelledby="compact-label">
+        <div class="compact-copy">
+          <div class="demo-meta">
+            <p id="compact-label">Demo 03 / Compact CJK</p>
+            <button type="button" data-play="compact-stage">Play sequence</button>
+          </div>
+          <p class="compact-kicker">Same component<br />new context</p>
+        </div>
+        <h2 class="compact-heading">
+          <span
+            id="compact-stage"
+            class="letter-pop"
+            data-text="我是Neal"
+            tabindex="0"
+            aria-label="我是Neal"
+          ></span>
+        </h2>
+      </section>
+    </main>
+
+    <footer>
+      <span>Letter Pop</span>
+      <span>Images are decorative; the original text remains the accessible name.</span>
+    </footer>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
