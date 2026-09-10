@@ -8,7 +8,7 @@
 
 这套工作流来自 [OpenAI ChatGPT Images 2.5 发布页](https://openai.com/index/introducing-chatgpt-images-2-5/)的交互形式，并已适配 React、Next.js、Vue、Svelte 和原生前端项目。
 
-在线 Demo 使用固定图片，以保证加载速度和效果一致。Skill 用于新的文字或项目时，默认会为本次任务重新生成素材。如果结果中有不满意的部分，可以保留已经认可的字形，只让 Agent 重新生成某个字、标点或整套视觉方向。
+在线 Demo 使用固定图片，以保证加载速度和效果一致。Skill 现在自带一个经过测试、无运行时依赖的浏览器组件，Agent 会直接复制交互实现，不再从文字说明重新猜一遍。用于新的文字或项目时，默认仍会生成新素材；如果部分结果不满意，可以保留已认可的字形，只重做指定出现位置。
 
 ## 在线 Demo
 
@@ -26,6 +26,8 @@
 - 让标点保持较小的视觉尺寸和自然的基线位置。
 - 生成或接入透明背景图片素材。
 - 使用稳定的命中层，避免字形放大后造成悬停抖动。
+- 对未知生图工具先只生成一个代表字，验证通过后才生成整套素材。
+- 自动检查真实 PNG、alpha 覆盖，并输出浅色和深色背景合成图。
 - 支持鼠标、触摸、键盘焦点和 `prefers-reduced-motion`。
 - 在真实页面中检查素材加载、控制台错误、换行和移动端溢出。
 
@@ -67,7 +69,7 @@ git clone https://github.com/neal-c611/letter-pop-skill.git \
 
 重启 WorkBuddy 或新建一个对话，然后使用 `/skills` 确认 `letter-pop` 已加载。
 
-需要生成新字形时，请确认 WorkBuddy 的 `ImageGen` 工具已经启用，并允许它提出的工具授权。Kimi-K3 的视觉能力可以理解图片，实际生成图片由独立的 `ImageGen` 工具完成。Letter Pop 现在会在长任务开始前检查这项能力，并用一次批量生成完成首稿，避免每个字分别调用一次生图。
+需要生成新字形时，请确认 WorkBuddy 的 `ImageGen` 工具已经启用，并允许它提出的工具授权。Kimi-K3 的视觉能力可以理解图片，实际生成图片由独立的 `ImageGen` 工具完成。Letter Pop 会先生成并验证一个代表字；只有探测通过才请求完整图集，并直接复制 Skill 自带的浏览器组件。
 
 ### 不使用 Git 下载
 
@@ -89,7 +91,7 @@ https://github.com/neal-c611/letter-pop-skill/archive/refs/heads/main.zip
 
 ## 运行要求
 
-Skill 本身没有网站运行时依赖。创建新的字形素材需要图片生成能力，或者由用户提供素材。如果生成模型不能直接输出 alpha，Letter Pop 可以先在纯色幕布上生成，再使用附带的 ImageMagick 脚本转换成真正的 RGBA PNG。建议使用浏览器自动化验证视觉效果。
+自带的浏览器组件没有运行时依赖。创建新字形素材需要图片生成能力，或者由用户提供素材。如果生成模型不能直接输出 alpha，Letter Pop 会先用一个字测试纯色幕布流程，再使用附带的 ImageMagick 脚本转换成 RGBA PNG；探测失败就停止整批生图。组件的 `verify()` 会配合浏览器自动化检查命中区域、素材加载、换行和页面溢出。
 
 如果 hover 后出现方框，应检查文件的真实格式和 alpha 通道。即使文件名以 `.png` 结尾，画进 RGB/JPEG 图片里的棋盘格依然是不透明背景。此时应在纯色幕布上重新生成，再运行 `scripts/remove-solid-matte.sh`，不要尝试用 CSS 隐藏方框。
 
@@ -100,8 +102,14 @@ letter-pop-skill/
 ├── SKILL.md
 ├── agents/
 │   └── openai.yaml
+├── assets/
+│   └── vanilla/
+│       ├── letter-pop.js
+│       ├── letter-pop.css
+│       └── example.js
 ├── scripts/
-│   └── remove-solid-matte.sh
+│   ├── remove-solid-matte.sh
+│   └── validate-glyph-assets.sh
 └── references/
     ├── artwork-generation.md
     └── implementation-pattern.md

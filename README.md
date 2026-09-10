@@ -8,7 +8,7 @@ An agent skill for turning a specific text fragment on an existing webpage into 
 
 The workflow was derived from the interaction pattern used in [OpenAI's ChatGPT Images 2.5 launch page](https://openai.com/index/introducing-chatgpt-images-2-5/), then generalized for existing React, Next.js, Vue, Svelte, and vanilla frontends.
 
-The live demos use fixed files so they load quickly and consistently. When the skill is applied to a new phrase or project, it generates fresh artwork for that task by default. If part of the result misses, you can keep the approved glyphs and ask the agent to regenerate only a specific letter, punctuation mark, or the whole visual direction.
+The live demos use fixed files so they load quickly and consistently. The skill ships a tested, dependency-free browser component, so agents copy the interaction instead of inventing it again. When the skill is applied to a new phrase or project, it generates fresh artwork for that task by default. If part of the result misses, you can keep the approved glyphs and ask the agent to regenerate only a specific occurrence.
 
 ## Live demos
 
@@ -26,6 +26,8 @@ Try the hover, tap, and keyboard interactions on the [live demo page](https://ne
 - Keeps punctuation visually smaller and aligned to its natural baseline.
 - Generates or integrates transparent raster artwork.
 - Implements a stable hit layer so expanding artwork does not cause hover jitter.
+- Uses a one-glyph capability probe before spending a full image batch on an unverified generator.
+- Includes automatic PNG/alpha checks plus light and dark composite reports.
 - Supports mouse, touch, keyboard focus, and `prefers-reduced-motion`.
 - Verifies asset loading, console errors, wrapping, and mobile overflow on the real route.
 
@@ -67,7 +69,7 @@ git clone https://github.com/neal-c611/letter-pop-skill.git \
 
 Restart or open a new WorkBuddy conversation, then use `/skills` to confirm that `letter-pop` is loaded.
 
-When the phrase needs new artwork, make sure WorkBuddy's `ImageGen` tool is enabled and approve its tool request. Kimi-K3's visual capability can understand images, while generation is provided by the separate `ImageGen` tool. Letter Pop now checks this capability before beginning a long run and uses a batched first draft rather than one generation call per character.
+When the phrase needs new artwork, make sure WorkBuddy's `ImageGen` tool is enabled and approve its tool request. Kimi-K3's visual capability can understand images, while generation is provided by the separate `ImageGen` tool. Letter Pop first validates one representative glyph. It requests the full atlas only after that probe passes, and it copies the supplied browser component instead of rebuilding the interaction.
 
 ### Download without Git
 
@@ -89,7 +91,7 @@ That is enough for a normal task. The skill owns asset generation, transparency 
 
 ## Requirements
 
-The skill itself has no website runtime dependency. Creating new glyph artwork requires an image-generation capability or user-provided assets. If a generator cannot emit alpha, Letter Pop can generate on a solid color matte and use the included ImageMagick script to create a true RGBA PNG. Browser automation is recommended for visual verification.
+The supplied browser component has no runtime dependency. Creating new glyph artwork requires an image-generation capability or user-provided assets. If a generator cannot emit alpha, Letter Pop can test one glyph on a solid color matte and use the included ImageMagick script to create a true RGBA PNG. A failed probe stops the full image spend. Browser automation verifies stable hit geometry, asset loading, wrapping, and overflow through the component's `verify()` method.
 
 If an active glyph shows a square, inspect the actual file signature and alpha channel. A checkerboard drawn into an RGB/JPEG image is still an opaque background, even when the filename ends in `.png`. Regenerate on a flat solid matte and run `scripts/remove-solid-matte.sh`; do not try to hide the square with CSS.
 
@@ -100,8 +102,14 @@ letter-pop-skill/
 ├── SKILL.md
 ├── agents/
 │   └── openai.yaml
+├── assets/
+│   └── vanilla/
+│       ├── letter-pop.js
+│       ├── letter-pop.css
+│       └── example.js
 ├── scripts/
-│   └── remove-solid-matte.sh
+│   ├── remove-solid-matte.sh
+│   └── validate-glyph-assets.sh
 └── references/
     ├── artwork-generation.md
     └── implementation-pattern.md

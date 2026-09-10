@@ -5,98 +5,100 @@ description: Transform a specific word, title, or text fragment in an existing w
 
 # Letter Pop
 
-Add the effect to the user's actual page while preserving the host element's semantics, typography, layout, and responsive behavior.
+Apply the effect to the user's real page. A short request naming the page and visible text is enough. Capability checks, cost limits, asset validation, component integration, responsive behavior, and browser verification belong to this workflow; do not ask the user to restate them.
 
-## Interpret a short request
+## Locate the exact target
 
-The user should only need to identify the target text and, when it is not obvious from the current workspace, the page or project. A request such as `用 letter-pop 把首页的“Hello, 我是Neal”做成这个效果` is sufficient.
+Inspect repository instructions and the current stack. Find the exact rendered occurrence from the user's text, then change only that source node or the smallest suitable component. Preserve the semantic parent, surrounding content, typography, and breakpoints. When a plain heading contains the target, wrap the text in a neutral inline element inside the heading; do not mount the effect on the heading itself.
 
-Treat capability checks, artwork generation, alpha validation, fallback processing, interaction architecture, accessibility, responsive behavior, and browser verification as the skill's internal workflow. Never require the user to repeat those instructions in their prompt. Infer a coherent first-pass art direction from the supplied reference and host page when the user does not specify one. Ask only when multiple rendered targets remain genuinely ambiguous or a missing choice would materially change the requested result.
+If the text occurs once, proceed without asking for a selector. Ask only when several rendered occurrences remain plausible. Record the baseline font, size, weight, line height, letter spacing, alignment, width, and wrapping before editing.
 
-## Establish the target
+## Use the supplied component
 
-Collect or infer:
+For vanilla HTML, static pages, and framework code that can initialize a DOM enhancement, copy these files from this skill into the project:
 
-- the project path and page route;
-- the exact visible text;
-- a selector or source component when the text is not unique;
-- the visual theme or reference;
-- whether artwork already exists.
+- `assets/vanilla/letter-pop.js`
+- `assets/vanilla/letter-pop.css`
 
-When the exact text occurs once, locate it in source and rendered DOM without asking for a selector. If several rendered instances are plausible, ask which one before editing. Modify source files rather than build output or fetched production markup.
+Use `assets/vanilla/example.js` as the API example. Copy the component files as-is; do not recreate the interaction from this document. The supplied component already handles grapheme segmentation, repeated occurrences, short CJK wrapping groups, punctuation sizing, stable hit geometry, mouse, touch, keyboard focus, reduced motion, cleanup, and runtime verification.
 
-Inspect repository instructions and the existing stack before choosing an implementation. Capture the target's baseline appearance when a runnable page is available, including font family, size, weight, line height, letter spacing, color, width, wrapping, and relevant breakpoints.
+Mount a neutral child of the semantic element:
 
-## Check capabilities before starting
+```html
+<h1 class="existing-title">
+  <span data-letter-pop-target>Hello, 我是Neal</span>
+</h1>
+```
 
-When new artwork is required, confirm that the current host exposes a working image-generation tool before starting implementation. Image understanding alone is not image generation. If generation is disabled, unavailable, or waiting for permission, surface that condition immediately instead of searching for unofficial substitutes, installing unrelated tools, or repeatedly retrying. Continue with existing or user-provided assets when available; otherwise explain the missing capability before doing long-running work.
+```js
+const instance = LetterPop.mount(
+  document.querySelector("[data-letter-pop-target]"),
+  { artwork }
+);
+```
 
-Give a short progress update when the task enters artwork generation, frontend integration, and browser verification. A pending tool call must not become a silent wait.
+The host element owns typography. Do not add a font inside the Letter Pop component or redesign the page.
 
-## Build the character plan
+For a framework-native port, first read [the implementation contract](references/implementation-pattern.md). Preserve its group shell, absolutely positioned visual group, normal-flow hit group, occurrence configuration, and `verify()` behavior. A hit element nested inside a letter whose padding changes is invalid. Prefer the supplied dependency-free component unless the project genuinely requires a native port.
 
-Segment text into grapheme clusters rather than code points. In JavaScript, prefer `Intl.Segmenter` with grapheme granularity and provide a safe fallback. Treat repeated characters as separate occurrences so they may use different artwork.
+## Bound image-generation cost
 
-- Spaces define wrapping opportunities and do not receive artwork.
-- Punctuation keeps a smaller visual scale, narrow expansion, and punctuation-appropriate baseline.
-- CJK glyphs keep a full-em footprint and must remain structurally legible.
-- Emoji and combining sequences remain a single interactive unit.
+When final artwork already exists, use it and make no image-generation calls.
 
-If new artwork is needed, read [artwork generation](references/artwork-generation.md). If the user supplied final assets, preserve them and skip generation.
+When new artwork is required, first check whether the current host has an enabled image-generation tool. Image understanding is not image generation. If generation is missing or disabled, stop the artwork branch immediately and report that capability; do not install unrelated tools, fake the result with SVG/CSS/emoji, or keep retrying.
 
-Accept an asset as transparent only after checking its decoded alpha channel, alpha coverage, file signature, and composites over both light and dark backgrounds. A `.png` filename does not prove PNG encoding or transparency, and a few transparent border pixels do not prove the background was removed. When the generator cannot emit alpha, use the solid-matte fallback in the artwork reference; never accept a rendered checkerboard or visible matte rectangle as transparency.
+For an image generator that has not already produced validated transparent glyphs in the current task:
 
-For a reference-driven Letter Pop effect, custom raster artwork is part of the requested result. Do not replace it with CSS gradients, SVG text using the original font outline, emoji, colored text, filters, or other placeholders and present that as complete. Use those only when the user explicitly asks for a code-only approximation. If raster generation and usable supplied assets are both unavailable, report the missing asset capability.
+1. Generate one representative probe glyph. Choose a structurally difficult CJK glyph when present, otherwise a representative letter. Do not generate the full phrase yet.
+2. Run `scripts/validate-glyph-assets.sh` on the probe and inspect its light and dark composites.
+3. If the probe is a JPEG disguised as PNG, has no usable alpha, contains a checkerboard, card, frame, or textured background, stop. Do not spend another call on the full phrase.
+4. If the generator is known to flatten alpha but the probe uses one genuinely flat matte color, process it locally with `scripts/remove-solid-matte.sh`, validate it again, and continue only when the composite is clean.
 
-Treat artwork as project-specific output. Generate a fresh set for each new phrase or new application unless the user asks to reuse existing assets. Demo artwork illustrates the interaction only and must not become the default asset pack for other projects. Keep deployed artwork deterministic: do not generate images at page runtime or randomly swap assets on reload unless the user explicitly requests that behavior.
+After a probe passes, make one batched atlas request for the full occurrence manifest and crop it locally. The default budget is one probe plus one atlas. Do not launch a second full atlas request without explicit user feedback requesting a new direction. Later corrections should include only rejected occurrence IDs and keep approved files.
 
-## Integrate into the existing page
+Read [artwork generation](references/artwork-generation.md) for the manifest, prompt pattern, cropping, matte fallback, and visual review. Fresh generation means a new skill run may produce a new design; deployed files remain fixed and do not change on hover or reload.
 
-Read [implementation pattern](references/implementation-pattern.md) before writing the component.
+## Reject bad assets before integration
 
-Replace only the requested text node or smallest suitable source component. Keep the semantic parent such as `h1`, `h2`, link, or button unless the interaction requires a valid structural change.
+Run:
 
-The component must:
+```bash
+scripts/validate-glyph-assets.sh PATH_TO_GLYPH_DIRECTORY PATH_TO_REPORT_DIRECTORY
+```
 
-- inherit font family, font size, weight, color, line height, and letter spacing by default;
-- use occurrence-based asset configuration and em-relative sizing;
-- separate the stable pointer hit layer from the expanding visual layer so hover does not jitter;
-- keep the original text available as one accessible name while hiding decorative layers from assistive technology;
-- preload artwork or reserve its geometry so initial rendering does not shift;
-- support mouse hover, a visible-duration tap interaction on touch devices, and keyboard focus;
-- respect `prefers-reduced-motion`;
-- preserve word-level wrapping and avoid horizontal overflow at supported breakpoints.
+This checks decoded file format, a real alpha channel, alpha extrema, and suspicious coverage, then writes `on-light.png` and `on-dark.png`. A `.png` extension and transparent border pixels are insufficient.
 
-Do not redesign the surrounding page, replace its font, or change unrelated copy unless the user requests it. Adapt the component to the repository's framework and conventions instead of adding a second frontend stack.
+Inspect both composites and reject any visible rectangle, matte fringe, checkerboard, card, malformed glyph, wrong occurrence order, or extra object. Check that punctuation is substantially smaller than adjacent glyph artwork. Do not integrate failed assets and promise to fix them later.
 
-The stable hit targets must live in their own coincident layer, outside the occurrences whose padding expands. A transparent hit span nested inside an expanding occurrence is not stable even if it is named `hit`.
+## Configure by grapheme occurrence
 
-## Tune the motion
+Build one artwork entry per grapheme in reading order, including separate entries for repeated characters. Spaces need no entry. Use the component defaults first and tune only outliers:
 
-Use the reference as the source of truth when one is provided. A useful initial feel is:
+```js
+const artwork = [
+  { src: "/letter-pop/g00-H.png", rotation: -6 },
+  { src: "/letter-pop/g01-e.png", rotation: 5 },
+  { src: "/letter-pop/g02-comma.png", scale: 0.55, spread: 0.02 },
+];
+```
 
-- enter from roughly `scale(.35)` with a small vertical offset and stronger initial rotation;
-- overshoot near `scale(1.04)` and settle around 400–500 ms;
-- expand the occurrence with per-glyph inline padding during the same interval;
-- retain the artwork briefly when the pointer crosses between characters;
-- keep touch artwork visible for roughly 600–900 ms.
-
-Treat these as starting values. Tune per glyph where its artwork, punctuation class, or script needs different spacing or baseline alignment.
-
-## Revise artwork without restarting
-
-After the first integrated preview, accept visual feedback at the level the user gives it: the whole direction, a material, or one grapheme occurrence. Keep approved glyphs and regenerate only rejected occurrences when possible. Use accepted neighboring artwork as visual reference, inspect the replacement, preserve its occurrence ID and public path, then rerun the affected interaction and layout checks. If the user wants choices before settling on a direction, generate a small candidate set for representative glyphs before completing the full phrase.
+Supported tuning fields are `src`, `spread`, `rotation`, `lift`, `scale`, `width`, `height`, and `bottom`. Punctuation already receives smaller defaults. Keep paths deterministic and preload or reserve all artwork before judging the layout.
 
 ## Verify on the real route
 
-Run the smallest checks that demonstrate the finished interaction:
+Expose the mounted instance during verification and run:
 
-1. Confirm the intended rendered occurrence changed and unrelated occurrences did not.
-2. Confirm every referenced artwork file loads with nonzero natural dimensions, has the expected file signature and alpha channel, and produces no 404s or console errors.
-3. Exercise the first, middle, repeated, punctuation, and CJK/emoji occurrences when present.
-4. Verify hover exit, rapid pointer movement across adjacent graphemes, touch tap duration, keyboard focus, and reduced-motion behavior.
-5. Measure representative hit-target rectangles before and during activation; their position and size should remain unchanged within browser rounding tolerance.
-6. Check the original target width plus supported desktop and mobile viewports for wrapping and horizontal overflow.
-7. Capture a resting and active screenshot when browser automation is available. Reject a final result whose active state is merely the original font silhouette with a gradient or filter.
+```js
+await instance.verify()
+```
 
-Report the route, source files changed, artwork directory, generation prompt if artwork was generated, and concrete verification results.
+Require `pass: true`. This proves that representative hit rectangles do not move or resize during activation, the page has no horizontal overflow, and all images decode. Also use browser automation to:
+
+1. confirm only the intended rendered occurrence changed;
+2. exercise first, middle, repeated, punctuation, and CJK occurrences;
+3. check pointer exit, rapid movement, touch hold, keyboard focus, and reduced motion;
+4. run at the original viewport, a common desktop viewport, and a narrow mobile viewport;
+5. capture resting and active screenshots and inspect actual line breaks and visual scale;
+6. reject console errors, failed requests, clipped artwork, isolated last-line fragments, and any active state that is merely a styled font silhouette.
+
+Do not declare success from source inspection alone. Report the route, changed files, artwork directory, image-call count, validation result, and measured `verify()` output.
