@@ -7,6 +7,12 @@ description: Transform a specific word, title, or text fragment in an existing w
 
 Add the effect to the user's actual page while preserving the host element's semantics, typography, layout, and responsive behavior.
 
+## Interpret a short request
+
+The user should only need to identify the target text and, when it is not obvious from the current workspace, the page or project. A request such as `用 letter-pop 把首页的“Hello, 我是Neal”做成这个效果` is sufficient.
+
+Treat capability checks, artwork generation, alpha validation, fallback processing, interaction architecture, accessibility, responsive behavior, and browser verification as the skill's internal workflow. Never require the user to repeat those instructions in their prompt. Infer a coherent first-pass art direction from the supplied reference and host page when the user does not specify one. Ask only when multiple rendered targets remain genuinely ambiguous or a missing choice would materially change the requested result.
+
 ## Establish the target
 
 Collect or infer:

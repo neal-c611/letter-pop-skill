@@ -1,4 +1,4 @@
 interface:
   display_name: "Letter Pop"
   short_description: "Add per-letter artwork hover effects to existing webpages"
-  default_prompt: "Use $letter-pop to turn a specific text fragment on my existing webpage into a per-letter artwork hover and tap interaction."
+  default_prompt: "Use $letter-pop on this text: \"\"."

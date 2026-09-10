@@ -82,19 +82,10 @@ Extract it, rename the folder to `letter-pop`, and place it inside the agent's u
 ## Use
 
 ```text
-$letter-pop
-
-Project: /path/to/my-website
-Page: /about
-Target: .hero-title
-Text: "Hello, 我是Neal"
-
-Turn this text into a per-letter artwork hover effect. Preserve the existing font,
-size, color, and responsive layout. Keep punctuation smaller. Use hover on desktop
-and tap on touch devices, then run the page and verify the result.
+$letter-pop Make "Hello, 我是Neal" on the homepage use this effect.
 ```
 
-If the text is unique, the page route and exact text are usually enough. A selector or source component is useful when the same copy appears more than once.
+That is enough for a normal task. The skill owns asset generation, transparency checks, interaction details, accessibility, responsive behavior, and browser verification. Add a selector or source component only when the same text appears more than once and the intended occurrence is unclear.
 
 ## Requirements
 
