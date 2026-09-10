@@ -98,7 +98,9 @@ If the text is unique, the page route and exact text are usually enough. A selec
 
 ## Requirements
 
-The skill itself has no runtime package dependency. Creating new glyph artwork requires an image-generation capability or user-provided transparent assets. Browser automation is recommended for visual verification. ImageMagick or another image tool is optional when a generated atlas needs deterministic cropping.
+The skill itself has no website runtime dependency. Creating new glyph artwork requires an image-generation capability or user-provided assets. If a generator cannot emit alpha, Letter Pop can generate on a solid color matte and use the included ImageMagick script to create a true RGBA PNG. Browser automation is recommended for visual verification.
+
+If an active glyph shows a square, inspect the actual file signature and alpha channel. A checkerboard drawn into an RGB/JPEG image is still an opaque background, even when the filename ends in `.png`. Regenerate on a flat solid matte and run `scripts/remove-solid-matte.sh`; do not try to hide the square with CSS.
 
 ## Structure
 
@@ -107,6 +109,8 @@ letter-pop-skill/
 ├── SKILL.md
 ├── agents/
 │   └── openai.yaml
+├── scripts/
+│   └── remove-solid-matte.sh
 └── references/
     ├── artwork-generation.md
     └── implementation-pattern.md

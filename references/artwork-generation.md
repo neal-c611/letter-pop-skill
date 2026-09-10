@@ -25,6 +25,20 @@ Start from a fresh generation for every new phrase or new project application un
 
 Generate once during implementation and ship the selected files with the site. Do not call an image model on hover, page load, or every refresh; runtime generation makes the interaction slow, costly, and visually inconsistent.
 
+### Fallback for generators without alpha output
+
+Some image-generation paths flatten every result to RGB or JPEG. Check the decoded file rather than trusting its extension or a checkerboard shown in the pixels. A file named `.png` may still contain JPEG bytes, and a visible checkerboard may be artwork rather than transparency.
+
+When alpha output is unavailable:
+
+1. Regenerate the glyph on a single flat, high-contrast matte color that does not occur in the glyph, such as `#00ff00` or `#ff00ff`.
+2. Explicitly request only the glyph: no transparency checkerboard, tile pattern, card, panel, rounded square, enclosing frame, border, floor, or background shadow.
+3. Run `scripts/remove-solid-matte.sh INPUT OUTPUT.png`. It samples the corner matte, removes the connected background with a soft color tolerance, and writes a true RGBA PNG. An optional third argument controls the ImageMagick fuzz percentage and defaults to `10`.
+4. Inspect the output against light and dark backgrounds. Adjust the fuzz value or regenerate with a cleaner matte if a colored fringe remains.
+5. Verify the output signature, alpha extrema, and visible bounds before integration.
+
+Do not use the matte remover on a generated checkerboard, gradient, scene, or enclosing frame. Those pixels cannot be separated reliably from translucent glyph materials; regenerate on a flat matte instead.
+
 For a short phrase, prefer one batch generation as an exact equal-cell atlas when the available tooling can crop it deterministically. Specify the grid dimensions, exact reading order, and one isolated glyph per cell. Avoid launching one image-generation request per character during the first pass. When an atlas is unsuitable, use the smallest number of batch requests the tool supports.
 
 Keep the first pass bounded. Make one complete batch, inspect it, and integrate a usable draft. If the batch has malformed glyphs, make at most one corrected full-batch retry; after that, regenerate only the failed occurrence IDs. Do not repeatedly regenerate the whole phrase while trying to reach an unrequested idea of perfection. If the generation tool fails, remains unavailable, or returns no usable output after the corrected retry, report that blocker and preserve completed code and assets.
@@ -38,6 +52,13 @@ Primary request: Create <count> separate character-shaped art stickers in an exa
 Scene/backdrop: genuinely transparent; no panels or grid lines
 Composition/framing: equal cells, one centered isolated glyph per cell, generous transparent padding, no overlap
 Constraints: preserve exact order and character structure; punctuation is substantially smaller and aligned near its baseline; CJK characters are structurally correct; no captions, labels, extra text, logos, watermark, borders, or objects outside the glyph silhouettes
+```
+
+For a solid-matte fallback, replace the backdrop line and strengthen the final constraint:
+
+```text
+Scene/backdrop: one perfectly flat #00ff00 background filling the canvas, with no texture, lighting variation, horizon, checkerboard, or gradient
+Constraints: glyph silhouette only; no card, panel, rounded square, enclosing frame, border, base, floor, or cast shadow on the background
 ```
 
 Choose grid dimensions that divide the final bitmap exactly. Preserve the original atlas alongside cropped occurrences when using an atlas.

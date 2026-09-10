@@ -38,6 +38,10 @@ Segment text into grapheme clusters rather than code points. In JavaScript, pref
 
 If new artwork is needed, read [artwork generation](references/artwork-generation.md). If the user supplied final assets, preserve them and skip generation.
 
+Accept an asset as transparent only after checking its decoded alpha channel and file signature. A `.png` filename does not prove PNG encoding or transparency. When the generator cannot emit alpha, use the solid-matte fallback in the artwork reference; never accept a rendered checkerboard as transparency.
+
+For a reference-driven Letter Pop effect, custom raster artwork is part of the requested result. Do not replace it with CSS gradients, SVG text using the original font outline, emoji, colored text, filters, or other placeholders and present that as complete. Use those only when the user explicitly asks for a code-only approximation. If raster generation and usable supplied assets are both unavailable, report the missing asset capability.
+
 Treat artwork as project-specific output. Generate a fresh set for each new phrase or new application unless the user asks to reuse existing assets. Demo artwork illustrates the interaction only and must not become the default asset pack for other projects. Keep deployed artwork deterministic: do not generate images at page runtime or randomly swap assets on reload unless the user explicitly requests that behavior.
 
 ## Integrate into the existing page
@@ -58,6 +62,8 @@ The component must:
 - preserve word-level wrapping and avoid horizontal overflow at supported breakpoints.
 
 Do not redesign the surrounding page, replace its font, or change unrelated copy unless the user requests it. Adapt the component to the repository's framework and conventions instead of adding a second frontend stack.
+
+The stable hit targets must live in their own coincident layer, outside the occurrences whose padding expands. A transparent hit span nested inside an expanding occurrence is not stable even if it is named `hit`.
 
 ## Tune the motion
 
@@ -80,10 +86,11 @@ After the first integrated preview, accept visual feedback at the level the user
 Run the smallest checks that demonstrate the finished interaction:
 
 1. Confirm the intended rendered occurrence changed and unrelated occurrences did not.
-2. Confirm every referenced artwork file loads with nonzero natural dimensions and no 404s or console errors.
+2. Confirm every referenced artwork file loads with nonzero natural dimensions, has the expected file signature and alpha channel, and produces no 404s or console errors.
 3. Exercise the first, middle, repeated, punctuation, and CJK/emoji occurrences when present.
 4. Verify hover exit, rapid pointer movement across adjacent graphemes, touch tap duration, keyboard focus, and reduced-motion behavior.
-5. Check the original target width plus supported desktop and mobile viewports for wrapping and horizontal overflow.
-6. Capture a resting and active screenshot when browser automation is available.
+5. Measure representative hit-target rectangles before and during activation; their position and size should remain unchanged within browser rounding tolerance.
+6. Check the original target width plus supported desktop and mobile viewports for wrapping and horizontal overflow.
+7. Capture a resting and active screenshot when browser automation is available. Reject a final result whose active state is merely the original font silhouette with a gradient or filter.
 
 Report the route, source files changed, artwork directory, generation prompt if artwork was generated, and concrete verification results.

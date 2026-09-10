@@ -97,7 +97,9 @@ $letter-pop
 
 ## 运行要求
 
-Skill 本身没有运行时依赖。创建新的字形素材需要图片生成能力，或者由用户提供透明背景素材。建议使用浏览器自动化验证视觉效果。如果生成结果是字形图集，可以选择使用 ImageMagick 或其他图片工具进行确定性裁切。
+Skill 本身没有网站运行时依赖。创建新的字形素材需要图片生成能力，或者由用户提供素材。如果生成模型不能直接输出 alpha，Letter Pop 可以先在纯色幕布上生成，再使用附带的 ImageMagick 脚本转换成真正的 RGBA PNG。建议使用浏览器自动化验证视觉效果。
+
+如果 hover 后出现方框，应检查文件的真实格式和 alpha 通道。即使文件名以 `.png` 结尾，画进 RGB/JPEG 图片里的棋盘格依然是不透明背景。此时应在纯色幕布上重新生成，再运行 `scripts/remove-solid-matte.sh`，不要尝试用 CSS 隐藏方框。
 
 ## 文件结构
 
@@ -106,6 +108,8 @@ letter-pop-skill/
 ├── SKILL.md
 ├── agents/
 │   └── openai.yaml
+├── scripts/
+│   └── remove-solid-matte.sh
 └── references/
     ├── artwork-generation.md
     └── implementation-pattern.md

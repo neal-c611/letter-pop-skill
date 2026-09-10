@@ -34,6 +34,8 @@ kinetic stage (accessible name = original text)
 
 The visual layer expands through inline padding on the active occurrence. The hit layer keeps the original text metrics and remains centered above it, so expansion cannot move the pointer target and repeatedly fire enter/leave.
 
+Do not put `.hit`, `.kinetic-hit`, or an equivalent target inside the expanding occurrence. Naming a nested element as a hit layer does not make its geometry stable; it inherits the occurrence's movement and size changes. Render the entire hit layer as a sibling of the entire visual layer.
+
 Keep artwork absolutely positioned inside the occurrence. An invisible image must not contribute its intrinsic size to grid or inline layout.
 
 ## State and events
