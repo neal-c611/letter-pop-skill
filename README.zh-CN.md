@@ -83,13 +83,15 @@ openclaw skills install git:neal-c611/letter-pop-skill@main --global
 
 ### Hermes Agent
 
-从 GitHub 安装专门打包的完整目录：
+把完整仓库克隆到 Hermes 的本地 Skill 目录：
 
 ```bash
-hermes skills install neal-c611/letter-pop-skill/skills/letter-pop
+mkdir -p "$HOME/.hermes/skills"
+git clone https://github.com/neal-c611/letter-pop-skill.git \
+  "$HOME/.hermes/skills/letter-pop"
 ```
 
-随后新建会话或执行 `/reset`，再用 `hermes skills list` 检查。部分 Hermes 版本会把 Raw `SKILL.md` URL 当成单文件 Skill，因此不要使用 Raw URL 安装这个多文件 Skill。
+随后新建会话或执行 `/reset`，再用 `hermes skills list` 检查。部分 Hermes 版本会把 Raw `SKILL.md` URL 当成单文件 Skill，因此应克隆完整仓库。
 
 ### 不使用 Git 下载
 
@@ -129,10 +131,7 @@ letter-pop-skill/
 │       └── example.js
 ├── scripts/
 │   ├── remove-solid-matte.sh
-│   ├── sync-hermes-package.sh
 │   └── validate-glyph-assets.sh
-├── skills/
-│   └── letter-pop/          # Hermes 可完整安装的发布目录
 └── references/
     ├── artwork-generation.md
     └── implementation-pattern.md

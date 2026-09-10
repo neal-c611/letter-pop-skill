@@ -83,13 +83,15 @@ Start a new session and confirm it with `openclaw skills list`. OpenClaw follows
 
 ### Hermes Agent
 
-Install the packaged skill directory from GitHub:
+Clone the complete skill into Hermes' local skill directory:
 
 ```bash
-hermes skills install neal-c611/letter-pop-skill/skills/letter-pop
+mkdir -p "$HOME/.hermes/skills"
+git clone https://github.com/neal-c611/letter-pop-skill.git \
+  "$HOME/.hermes/skills/letter-pop"
 ```
 
-Then start a new session or use `/reset`, and verify it with `hermes skills list`. Use this GitHub directory form rather than the Raw `SKILL.md` URL on Hermes versions that treat direct URLs as single-file skills.
+Then start a new session or use `/reset`, and verify it with `hermes skills list`. Use the complete clone rather than the Raw `SKILL.md` URL on Hermes versions that treat direct URLs as single-file skills.
 
 ### Download without Git
 
@@ -129,10 +131,7 @@ letter-pop-skill/
 │       └── example.js
 ├── scripts/
 │   ├── remove-solid-matte.sh
-│   ├── sync-hermes-package.sh
 │   └── validate-glyph-assets.sh
-├── skills/
-│   └── letter-pop/          # complete Hermes-installable package
 └── references/
     ├── artwork-generation.md
     └── implementation-pattern.md
