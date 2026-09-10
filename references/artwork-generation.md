@@ -21,6 +21,10 @@ Use generated artwork as the decorative replacement while retaining real text fo
 
 Use the available image-generation workflow for original raster assets. Request genuinely transparent output.
 
+Start from a fresh generation for every new phrase or new project application unless the user explicitly asks to reuse an existing set. Image generation is intentionally variable, so separate runs may produce different materials, colors, and silhouettes even with the same brief. Do not copy the skill's demo assets into a user's project as default output.
+
+Generate once during implementation and ship the selected files with the site. Do not call an image model on hover, page load, or every refresh; runtime generation makes the interaction slow, costly, and visually inconsistent.
+
 For a short phrase, an exact equal-cell atlas is efficient when the available tooling can crop it deterministically. Specify the grid dimensions, exact reading order, and one isolated glyph per cell. Otherwise generate one transparent image per occurrence.
 
 Prompt pattern:
@@ -48,6 +52,19 @@ Inspect the actual output at full resolution.
 - Crop cells without trimming away designed baseline padding. If trimming is needed, record a per-glyph baseline offset.
 
 Save project-bound files inside the repository, use stable occurrence-based names, and record source paths plus the final generation prompt.
+
+## Iterate on visual feedback
+
+The first set is a draft that can be revised without rebuilding the interaction.
+
+- If the overall direction misses, change the art-direction prompt and regenerate the atlas or complete set.
+- If a few glyphs miss, retain the approved files and regenerate only those occurrence IDs.
+- If the user is unsure about direction, create two or three variants of a representative glyph or short subset before generating the complete phrase.
+- Use accepted glyphs as image references when the generation tool supports it, so replacements remain coherent.
+- Inspect a replacement before overwriting the published file. Once accepted, keep the same occurrence ID and asset path so component code does not need to change.
+- Clear or bypass browser caches and recapture the active preview after replacement.
+
+Do not silently discard a set the user approved. Keep iteration scoped to the feedback they gave.
 
 ## Suggested configuration
 

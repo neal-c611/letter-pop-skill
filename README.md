@@ -4,6 +4,8 @@ An agent skill for turning a specific text fragment on an existing webpage into 
 
 The workflow was derived from the interaction pattern used in OpenAI's ChatGPT Images 2.5 launch page, then generalized for existing React, Next.js, Vue, Svelte, and vanilla frontends.
 
+The live demos use fixed files so they load quickly and consistently. When the skill is applied to a new phrase or project, it generates fresh artwork for that task by default. If part of the result misses, you can keep the approved glyphs and ask the agent to regenerate only a specific letter, punctuation mark, or the whole visual direction.
+
 ## Live demos
 
 Try the hover, tap, and keyboard interactions on the [live demo page](https://neal-c611.github.io/letter-pop-skill/). The same artwork is shown inside three different typographic contexts to demonstrate that Letter Pop inherits the host page's font.

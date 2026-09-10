@@ -32,6 +32,8 @@ Segment text into grapheme clusters rather than code points. In JavaScript, pref
 
 If new artwork is needed, read [artwork generation](references/artwork-generation.md). If the user supplied final assets, preserve them and skip generation.
 
+Treat artwork as project-specific output. Generate a fresh set for each new phrase or new application unless the user asks to reuse existing assets. Demo artwork illustrates the interaction only and must not become the default asset pack for other projects. Keep deployed artwork deterministic: do not generate images at page runtime or randomly swap assets on reload unless the user explicitly requests that behavior.
+
 ## Integrate into the existing page
 
 Read [implementation pattern](references/implementation-pattern.md) before writing the component.
@@ -62,6 +64,10 @@ Use the reference as the source of truth when one is provided. A useful initial 
 - keep touch artwork visible for roughly 600–900 ms.
 
 Treat these as starting values. Tune per glyph where its artwork, punctuation class, or script needs different spacing or baseline alignment.
+
+## Revise artwork without restarting
+
+After the first integrated preview, accept visual feedback at the level the user gives it: the whole direction, a material, or one grapheme occurrence. Keep approved glyphs and regenerate only rejected occurrences when possible. Use accepted neighboring artwork as visual reference, inspect the replacement, preserve its occurrence ID and public path, then rerun the affected interaction and layout checks. If the user wants choices before settling on a direction, generate a small candidate set for representative glyphs before completing the full phrase.
 
 ## Verify on the real route
 
