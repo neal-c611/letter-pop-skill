@@ -23,6 +23,7 @@ if [[ ${#files[@]} -eq 0 ]]; then
 fi
 
 status=0
+warnings=0
 printf 'file\tformat\tchannels\twidth\theight\talpha_min\talpha_max\talpha_mean\tresult\n'
 
 for file in "${files[@]}"; do
@@ -42,9 +43,12 @@ for file in "${files[@]}"; do
   IFS='|' read -r alpha_min alpha_max alpha_mean <<< "$alpha_stats"
   result=PASS
   if ! awk -v lo="$alpha_min" -v hi="$alpha_max" -v mean="$alpha_mean" \
-      'BEGIN { exit !(lo <= 0.01 && hi >= 0.99 && mean > 0.005 && mean < 0.72) }'; then
+      'BEGIN { exit !(lo <= 0.01 && hi >= 0.99 && mean > 0.005) }'; then
     result='FAIL alpha-coverage'
     status=1
+  elif awk -v mean="$alpha_mean" 'BEGIN { exit !(mean >= 0.72) }'; then
+    result='WARN inspect-high-coverage'
+    warnings=1
   fi
   printf '%s\t%s\t%s\t%s\t%s\t%.4f\t%.4f\t%.4f\t%s\n' \
     "$(basename "$file")" "$format" "$channels" "$width" "$height" \
@@ -61,4 +65,8 @@ if [[ $status -ne 0 ]]; then
   exit 1
 fi
 
-echo "ACCEPTED: decoded PNG alpha checks passed. Inspect both composites for matte residue and wrong glyphs."
+if [[ $warnings -ne 0 ]]; then
+  echo "ACCEPTED WITH WARNINGS: tightly cropped glyphs can have high alpha coverage. Inspect both composites before integration."
+else
+  echo "ACCEPTED: decoded PNG alpha checks passed. Inspect both composites for matte residue and wrong glyphs."
+fi

@@ -66,7 +66,7 @@ Run:
 scripts/validate-glyph-assets.sh PATH_TO_GLYPH_DIRECTORY PATH_TO_REPORT_DIRECTORY
 ```
 
-This checks decoded file format, a real alpha channel, alpha extrema, and suspicious coverage, then writes `on-light.png` and `on-dark.png`. A `.png` extension and transparent border pixels are insufficient.
+This checks decoded file format, a real alpha channel, alpha extrema, and suspicious coverage, then writes `on-light.png` and `on-dark.png`. High coverage is a warning because tightly cropped valid glyphs can exceed the heuristic. A `.png` extension and transparent border pixels are insufficient.
 
 Inspect both composites and reject any visible rectangle, matte fringe, checkerboard, card, malformed glyph, wrong occurrence order, or extra object. Check that punctuation is substantially smaller than adjacent glyph artwork. Do not integrate failed assets and promise to fix them later.
 
