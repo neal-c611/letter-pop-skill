@@ -25,7 +25,7 @@ await instance.verify(index);
 instance.destroy();
 ```
 
-Every artwork item may specify `src`, `spread`, `rotation`, `lift`, `scale`, `width`, `height`, and `bottom`. An omitted item leaves the real character unchanged.
+Every artwork item may specify `src`, optional `variants`, `spread`, `rotation`, `lift`, `scale`, `width`, `height`, and `bottom`. The component preloads all sources, displays the primary image on the first activation, then cycles through variants on later separate activations. An omitted item leaves the real character unchanged.
 
 ## Geometry invariant
 
@@ -34,7 +34,7 @@ Each wrapping group has this structure:
 ```text
 group shell (size comes only from hit group)
 ├── visual group (absolute, centered, excluded from layout)
-│   └── occurrence (real character + absolute artwork; padding may expand)
+│   └── occurrence (real character + stacked absolute artwork variants; padding may expand)
 └── hit group (normal flow, transparent)
     └── stable target for each occurrence
 ```
@@ -53,7 +53,7 @@ Test the real text at desktop and mobile widths. Adjust the host's existing resp
 
 The mounted target receives one accessible label containing the original text. Decorative visual and hit layers are hidden from assistive technology. The component provides one focus stop for the phrase rather than one per character.
 
-Use occurrence indices as state keys. Keep the short delayed return that prevents flicker while a pointer crosses neighboring glyphs. Clear timers on teardown. Keep asset paths and rotations stable during server rendering and page reloads.
+Use occurrence indices as state keys. Advance a variant only when an inactive occurrence begins a new activation; repeated events during the same active state must not skip images. Keep the short delayed return that prevents flicker while a pointer crosses neighboring glyphs. Clear timers on teardown. Keep asset paths and rotations stable during server rendering and page reloads.
 
 ## Native framework ports
 

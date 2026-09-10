@@ -74,17 +74,21 @@ Inspect all three reports. Reject any visible rectangle, matte fringe, checkerbo
 
 ## Configure by grapheme occurrence
 
-Build one artwork entry per grapheme in reading order, including separate entries for repeated characters. Spaces need no entry. Use the component defaults first and tune only outliers:
+Build one artwork entry per grapheme in reading order, including separate entries for repeated characters. Spaces need no entry. Each entry may use one required `src` or add optional `variants`; the component cycles through the available files on separate activations. Generate one file per occurrence by default. Create variants only when the user asks for them, and allow variants for selected occurrences so the image cost does not have to multiply across the whole phrase. Use the component defaults first and tune only outliers:
 
 ```js
 const artwork = [
   { src: "/letter-pop/g00-H.png", rotation: -6 },
-  { src: "/letter-pop/g01-e.png", rotation: 5 },
+  {
+    src: "/letter-pop/g01-e-a.png",
+    variants: ["/letter-pop/g01-e-b.png"],
+    rotation: 5,
+  },
   { src: "/letter-pop/g02-comma.png", scale: 0.55, spread: 0.02 },
 ];
 ```
 
-Supported tuning fields are `src`, `spread`, `rotation`, `lift`, `scale`, `width`, `height`, and `bottom`. Punctuation already receives smaller defaults. Keep paths deterministic and preload or reserve all artwork before judging the layout.
+Supported fields are `src`, `variants`, `spread`, `rotation`, `lift`, `scale`, `width`, `height`, and `bottom`. Punctuation already receives smaller defaults. Keep paths deterministic and preload or reserve every primary and variant image before judging the layout.
 
 ## Verify on the real route
 

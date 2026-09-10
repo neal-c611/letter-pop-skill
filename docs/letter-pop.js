@@ -78,6 +78,16 @@
     return typeof raw === "string" ? { src: raw } : raw;
   }
 
+  function artworkSources(config) {
+    if (!config) return [];
+    const variants = Array.isArray(config.variants)
+      ? config.variants
+      : (config.variants ? [config.variants] : []);
+    return [config.src, ...variants]
+      .filter((src) => typeof src === "string" && src.length > 0)
+      .filter((src, index, sources) => sources.indexOf(src) === index);
+  }
+
   function rectDelta(before, after) {
     return Math.max(
       Math.abs(before.x - after.x),
@@ -104,6 +114,7 @@
     const artwork = settings.artwork || [];
     const occurrences = [];
     const hits = [];
+    const variantStates = [];
     const timers = new Map();
     const scheduled = new Set();
     const previous = {
@@ -142,6 +153,16 @@
       const occurrence = occurrences[index];
       if (!occurrence) return;
       cancel(timers.get(index));
+      if (!occurrence.classList.contains("is-active")) {
+        const state = variantStates[index];
+        if (state && state.images.length) {
+          const selected = state.activationCount % state.images.length;
+          state.images.forEach((image, imageIndex) => {
+            image.classList.toggle("is-current", imageIndex === selected);
+          });
+          state.activationCount += 1;
+        }
+      }
       occurrence.classList.remove("is-returning");
       occurrence.classList.add("is-active");
     }
@@ -197,13 +218,19 @@
         if (item.type === "punctuation") letter.classList.add("is-punctuation");
         if (item.type === "cjk") letter.classList.add("is-cjk");
 
-        if (config && config.src) {
-          const image = document.createElement("img");
-          image.className = "lp-art";
-          image.src = config.src;
-          image.alt = "";
-          image.draggable = false;
-          artShell.append(image);
+        const sources = artworkSources(config);
+        if (sources.length) {
+          const images = sources.map((src, sourceIndex) => {
+            const image = document.createElement("img");
+            image.className = `lp-art${sourceIndex === 0 ? " is-current" : ""}`;
+            image.src = src;
+            image.alt = "";
+            image.draggable = false;
+            image.dataset.letterPopVariant = String(sourceIndex);
+            return image;
+          });
+          artShell.append(...images);
+          variantStates[item.index] = { images, activationCount: 0 };
           letter.style.setProperty("--spread", `${config.spread ?? (item.type === "punctuation" ? 0.025 : 0.13)}em`);
           letter.style.setProperty("--rotation", `${config.rotation ?? ((item.index % 2 ? 1 : -1) * (4 + item.index % 4))}deg`);
           letter.style.setProperty("--lift", `${config.lift ?? 0}em`);
@@ -252,6 +279,7 @@
         : max, 0);
       const images = Array.from(target.querySelectorAll("img"));
       const failedImages = images.filter((image) => !image.complete || image.naturalWidth === 0).map((image) => image.src);
+      const artworkCount = occurrences.filter((occurrence) => occurrence && !occurrence.classList.contains("has-no-art")).length;
       const viewportOverflow = Math.max(0, document.documentElement.scrollWidth - document.documentElement.clientWidth);
       deactivate(selected, 0);
       return {
@@ -260,7 +288,9 @@
         viewportOverflow,
         failedImages,
         hitCount: available.length,
-        artworkCount: images.length,
+        artworkCount,
+        imageCount: images.length,
+        variantCount: images.length - artworkCount,
       };
     }
 

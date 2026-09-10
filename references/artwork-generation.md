@@ -106,3 +106,20 @@ Record the art-direction manifest, final prompts, batch membership, and generati
 ## Revise from feedback
 
 A new skill invocation may create a different visual direction, while a deployed page uses fixed files. If the user rejects a material or occurrence, keep every approved file and regenerate only the rejected IDs. Preserve their public paths so component code does not change. Never silently replace an approved set.
+
+## Optional variants
+
+Generate one final image per occurrence unless the user requests alternatives. When variants are requested, include a variant ID such as `g00-H-a` and `g00-H-b` in the manifest. A request for two images may apply to the whole phrase or only named occurrences; do not assume that every glyph needs two.
+
+Give variants of the same occurrence different art directions rather than recoloring the same render. Count them as separate cells when planning small contrast atlases and report the added generation calls. Validate every variant with the same transparency, character-accuracy, and style-separation checks.
+
+Configure the first file as `src` and any alternatives as `variants`:
+
+```js
+{
+  src: "/letter-pop/g00-H-a.png",
+  variants: ["/letter-pop/g00-H-b.png"]
+}
+```
+
+The supplied component preloads all files and cycles to the next one on each separate pointer, touch, or keyboard activation. A deployed page therefore has deterministic local rotation among fixed assets; it does not call an image model at runtime.

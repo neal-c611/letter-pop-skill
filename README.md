@@ -24,6 +24,7 @@ Try the hover, tap, and keyboard interactions on the [live demo page](https://ne
 - Preserves the host page's font, size, weight, color, semantics, wrapping, and breakpoints.
 - Plans artwork by grapheme occurrence, including repeated letters, CJK, emoji, and combining sequences.
 - Gives every glyph a separate visual medium, construction, and depiction method; palette changes alone do not count as variation.
+- Supports one image per glyph by default or optional per-glyph variants that cycle on separate activations.
 - Keeps punctuation visually smaller and aligned to its natural baseline.
 - Generates or integrates transparent raster artwork.
 - Implements a stable hit layer so expanding artwork does not cause hover jitter.

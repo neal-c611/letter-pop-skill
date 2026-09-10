@@ -29,8 +29,14 @@ function artworkFor(text) {
       const occurrence = seen.get(char) || 0;
       seen.set(char, occurrence + 1);
       const config = tuning[index % tuning.length];
+      const primaryIndex = occurrence % choices.length;
+      const orderedChoices = [
+        ...choices.slice(primaryIndex),
+        ...choices.slice(0, primaryIndex),
+      ];
       return {
-        src: `./assets/glyphs/${choices[occurrence % choices.length]}`,
+        src: `./assets/glyphs/${orderedChoices[0]}`,
+        variants: orderedChoices.slice(1).map((name) => `./assets/glyphs/${name}`),
         spread: /\p{P}/u.test(char) ? 0.02 : config.spread,
         rotation: config.rotation,
         lift: config.lift,
