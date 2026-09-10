@@ -58,7 +58,8 @@ done
 tile="160x160"
 magick "${files[@]}" -thumbnail "$tile" -background '#f2efe7' -gravity center -extent 180x180 -alpha remove -alpha off +append "$report_dir/on-light.png"
 magick "${files[@]}" -thumbnail "$tile" -background '#181816' -gravity center -extent 180x180 -alpha remove -alpha off +append "$report_dir/on-dark.png"
-echo "Composites: $report_dir/on-light.png and $report_dir/on-dark.png"
+magick "$report_dir/on-light.png" -colorspace Gray "$report_dir/style-grayscale.png"
+echo "Reports: $report_dir/on-light.png, $report_dir/on-dark.png, and $report_dir/style-grayscale.png"
 
 if [[ $status -ne 0 ]]; then
   echo "REJECTED: fix failed files before frontend integration." >&2
@@ -66,7 +67,7 @@ if [[ $status -ne 0 ]]; then
 fi
 
 if [[ $warnings -ne 0 ]]; then
-  echo "ACCEPTED WITH WARNINGS: tightly cropped glyphs can have high alpha coverage. Inspect both composites before integration."
+  echo "ACCEPTED WITH WARNINGS: tightly cropped glyphs can have high alpha coverage. Inspect all three reports before integration."
 else
-  echo "ACCEPTED: decoded PNG alpha checks passed. Inspect both composites for matte residue and wrong glyphs."
+  echo "ACCEPTED: decoded PNG alpha checks passed. Inspect all three reports for matte residue, wrong glyphs, and style repetition."
 fi

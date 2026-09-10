@@ -54,7 +54,9 @@ For an image generator that has not already produced validated transparent glyph
 3. If the probe is a JPEG disguised as PNG, has no usable alpha, contains a checkerboard, card, frame, or textured background, stop. Do not spend another call on the full phrase.
 4. If the generator is known to flatten alpha but the probe uses one genuinely flat matte color, process it locally with `scripts/remove-solid-matte.sh`, validate it again, and continue only when the composite is clean.
 
-After a probe passes, make one batched atlas request for the full occurrence manifest and crop it locally. The default budget is one probe plus one atlas. Do not launch a second full atlas request without explicit user feedback requesting a new direction. Later corrections should include only rejected occurrence IDs and keep approved files.
+After a probe passes, create an occurrence-level art-direction manifest before generating the set. Give every non-space occurrence its own visual medium, construction, and render mode; a color change or a different label on the same soft 3D treatment does not count as a new direction. Repeated characters must also receive independent directions.
+
+Generate a representative 3–5 glyph subset as a deliberately high-contrast atlas and inspect it before spending on the remainder. Include different scripts or structural types when the phrase provides them. Reject the batch if the generator gives every cell the same bevel, volume, lighting, texture family, or cute rounded 3D treatment. Once that gate passes, generate the remaining glyphs in atlases of at most five. Do not put a longer phrase into one full atlas: image models tend to impose one global style on a single grid. The default budget is one transparency probe plus `ceil(non-space graphemes / 5)` contrast atlases. Do not generate one image per character or retry completed batches without explicit user feedback; later corrections should contain only rejected occurrence IDs and keep approved files.
 
 Read [artwork generation](references/artwork-generation.md) for the manifest, prompt pattern, cropping, matte fallback, and visual review. Fresh generation means a new skill run may produce a new design; deployed files remain fixed and do not change on hover or reload.
 
@@ -66,9 +68,9 @@ Run:
 scripts/validate-glyph-assets.sh PATH_TO_GLYPH_DIRECTORY PATH_TO_REPORT_DIRECTORY
 ```
 
-This checks decoded file format, a real alpha channel, alpha extrema, and suspicious coverage, then writes `on-light.png` and `on-dark.png`. High coverage is a warning because tightly cropped valid glyphs can exceed the heuristic. A `.png` extension and transparent border pixels are insufficient.
+This checks decoded file format, a real alpha channel, alpha extrema, and suspicious coverage, then writes `on-light.png`, `on-dark.png`, and `style-grayscale.png`. High coverage is a warning because tightly cropped valid glyphs can exceed the heuristic. A `.png` extension and transparent border pixels are insufficient.
 
-Inspect both composites and reject any visible rectangle, matte fringe, checkerboard, card, malformed glyph, wrong occurrence order, or extra object. Check that punctuation is substantially smaller than adjacent glyph artwork. Do not integrate failed assets and promise to fix them later.
+Inspect all three reports. Reject any visible rectangle, matte fringe, checkerboard, card, malformed glyph, wrong occurrence order, or extra object. Also reject a set whose non-punctuation glyphs differ mainly by color while sharing the same construction and render treatment. Their differences should remain obvious in the grayscale report at thumbnail size. Check that punctuation is substantially smaller than adjacent glyph artwork. Do not integrate failed assets and promise to fix them later.
 
 ## Configure by grapheme occurrence
 

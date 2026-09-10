@@ -23,11 +23,12 @@ Try the hover, tap, and keyboard interactions on the [live demo page](https://ne
 - Finds the requested text in an existing codebase and changes only that rendered occurrence.
 - Preserves the host page's font, size, weight, color, semantics, wrapping, and breakpoints.
 - Plans artwork by grapheme occurrence, including repeated letters, CJK, emoji, and combining sequences.
+- Gives every glyph a separate visual medium, construction, and depiction method; palette changes alone do not count as variation.
 - Keeps punctuation visually smaller and aligned to its natural baseline.
 - Generates or integrates transparent raster artwork.
 - Implements a stable hit layer so expanding artwork does not cause hover jitter.
-- Uses a one-glyph capability probe before spending a full image batch on an unverified generator.
-- Includes automatic PNG/alpha checks plus light and dark composite reports.
+- Uses a one-glyph capability probe, then a small high-contrast batch before spending on the remaining artwork.
+- Includes automatic PNG/alpha checks plus light, dark, and grayscale reports.
 - Supports mouse, touch, keyboard focus, and `prefers-reduced-motion`.
 - Verifies asset loading, console errors, wrapping, and mobile overflow on the real route.
 
@@ -69,7 +70,7 @@ git clone https://github.com/neal-c611/letter-pop-skill.git \
 
 Restart or open a new WorkBuddy conversation, then use `/skills` to confirm that `letter-pop` is loaded.
 
-When the phrase needs new artwork, make sure WorkBuddy's `ImageGen` tool is enabled and approve its tool request. Kimi-K3's visual capability can understand images, while generation is provided by the separate `ImageGen` tool. Letter Pop first validates one representative glyph. It requests the full atlas only after that probe passes, and it copies the supplied browser component instead of rebuilding the interaction.
+When the phrase needs new artwork, make sure WorkBuddy's `ImageGen` tool is enabled and approve its tool request. Kimi-K3's visual capability can understand images, while generation is provided by the separate `ImageGen` tool. Letter Pop first validates one representative glyph, then tests 3–5 deliberately incompatible art directions in a small atlas. Only after both gates pass does it generate the remaining small batches. It copies the supplied browser component instead of rebuilding the interaction.
 
 ### OpenClaw
 
@@ -113,7 +114,7 @@ That is enough for a normal task. The skill owns asset generation, transparency 
 
 ## Requirements
 
-The supplied browser component has no runtime dependency. Creating new glyph artwork requires an image-generation capability or user-provided assets. If a generator cannot emit alpha, Letter Pop can test one glyph on a solid color matte and use the included ImageMagick script to create a true RGBA PNG. A failed probe stops the full image spend. Browser automation verifies stable hit geometry, asset loading, wrapping, and overflow through the component's `verify()` method.
+The supplied browser component has no runtime dependency. Creating new glyph artwork requires an image-generation capability or user-provided assets. If a generator cannot emit alpha, Letter Pop can test one glyph on a solid color matte and use the included ImageMagick script to create a true RGBA PNG. A failed transparency probe or style-contrast batch stops the remaining image spend. Longer phrases are split into atlases of no more than five glyphs so the model does not impose one global render style. Browser automation verifies stable hit geometry, asset loading, wrapping, and overflow through the component's `verify()` method.
 
 If an active glyph shows a square, inspect the actual file signature and alpha channel. A checkerboard drawn into an RGB/JPEG image is still an opaque background, even when the filename ends in `.png`. Regenerate on a flat solid matte and run `scripts/remove-solid-matte.sh`; do not try to hide the square with CSS.
 
