@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="Three interactive examples made with the Letter Pop agent skill."
+      content="Five interactive examples made with the Letter Pop agent skill, including artwork generated with WorkBuddy and Doubao."
     />
     <title>Letter Pop — Interactive demos</title>
     <link rel="stylesheet" href="./styles.css" />
@@ -21,6 +21,8 @@
         <a href="#sans">Sans</a>
         <a href="#serif">Serif</a>
         <a href="#compact">Compact</a>
+        <a href="#workbuddy">WorkBuddy</a>
+        <a href="#doubao">Doubao</a>
         <a href="https://github.com/neal-c611/letter-pop-skill">GitHub ↗</a>
       </nav>
     </header>
@@ -80,6 +82,42 @@
             aria-label="我是Neal"
           ></span>
         </h2>
+      </section>
+
+      <section id="workbuddy" class="demo demo-agent demo-workbuddy" aria-labelledby="workbuddy-label">
+        <div class="demo-meta">
+          <p id="workbuddy-label">Demo 04 / Generated with WorkBuddy</p>
+          <button type="button" data-play="workbuddy-stage">Play sequence</button>
+        </div>
+        <p class="agent-kicker">One runtime · twenty independent art directions</p>
+        <h2 class="agent-heading">
+          <span
+            id="workbuddy-stage"
+            class="letter-pop"
+            data-text="大家好，我是 Workbuddy Neal 。"
+            tabindex="0"
+            aria-label="大家好，我是 Workbuddy Neal 。"
+          ></span>
+        </h2>
+        <p class="agent-note">Glass, wood, jade, moss, rope, neon, ice, embroidery, bamboo, and more.</p>
+      </section>
+
+      <section id="doubao" class="demo demo-agent demo-doubao" aria-labelledby="doubao-label">
+        <div class="demo-meta">
+          <p id="doubao-label">Demo 05 / Generated with Doubao</p>
+          <button type="button" data-play="doubao-stage">Play sequence</button>
+        </div>
+        <p class="agent-kicker">Thirteen glyphs · mixed media</p>
+        <h2 class="agent-heading">
+          <span
+            id="doubao-stage"
+            class="letter-pop"
+            data-text="大家好，我是 豆包 Neal 。"
+            tabindex="0"
+            aria-label="大家好，我是 豆包 Neal 。"
+          ></span>
+        </h2>
+        <p class="agent-note">Metal, moss, neon, paper, walnut, amber, glass, embroidery, and chocolate.</p>
       </section>
     </main>
 

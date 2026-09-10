@@ -18,6 +18,12 @@
 | --- | --- | --- |
 | [![无衬线 Demo：Hello, 我是Neal](docs/previews/demo-sans.png)](https://neal-c611.github.io/letter-pop-skill/#sans) | [![衬线体 Demo：Hello, Neal](docs/previews/demo-serif.png)](https://neal-c611.github.io/letter-pop-skill/#serif) | [![紧凑 Demo：我是Neal](docs/previews/demo-compact.png)](https://neal-c611.github.io/letter-pop-skill/#compact) |
 
+同一个 Skill 也分别在 WorkBuddy 和豆包中运行过。下面保留了它们实际生成的素材，并统一使用 Letter Pop 自带的交互组件：
+
+| WorkBuddy 生成 | 豆包生成 |
+| --- | --- |
+| [![WorkBuddy 生成的 Letter Pop Demo](docs/previews/demo-workbuddy.png)](https://neal-c611.github.io/letter-pop-skill/#workbuddy) | [![豆包生成的 Letter Pop Demo](docs/previews/demo-doubao.png)](https://neal-c611.github.io/letter-pop-skill/#doubao) |
+
 ## 能做什么
 
 - 在现有代码中找到指定文字，只修改目标位置。

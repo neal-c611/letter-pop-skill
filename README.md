@@ -18,6 +18,12 @@ Try the hover, tap, and keyboard interactions on the [live demo page](https://ne
 | --- | --- | --- |
 | [![Sans demo showing Hello, 我是Neal](docs/previews/demo-sans.png)](https://neal-c611.github.io/letter-pop-skill/#sans) | [![Serif demo showing Hello, Neal](docs/previews/demo-serif.png)](https://neal-c611.github.io/letter-pop-skill/#serif) | [![Compact demo showing 我是Neal](docs/previews/demo-compact.png)](https://neal-c611.github.io/letter-pop-skill/#compact) |
 
+The same skill was also run in WorkBuddy and Doubao. These are their preserved generated asset sets, mounted with the shared Letter Pop runtime:
+
+| WorkBuddy-generated set | Doubao-generated set |
+| --- | --- |
+| [![WorkBuddy-generated Letter Pop demo](docs/previews/demo-workbuddy.png)](https://neal-c611.github.io/letter-pop-skill/#workbuddy) | [![Doubao-generated Letter Pop demo](docs/previews/demo-doubao.png)](https://neal-c611.github.io/letter-pop-skill/#doubao) |
+
 ## What it handles
 
 - Finds the requested text in an existing codebase and changes only that rendered occurrence.
