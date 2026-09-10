@@ -71,6 +71,26 @@ Restart or open a new WorkBuddy conversation, then use `/skills` to confirm that
 
 When the phrase needs new artwork, make sure WorkBuddy's `ImageGen` tool is enabled and approve its tool request. Kimi-K3's visual capability can understand images, while generation is provided by the separate `ImageGen` tool. Letter Pop first validates one representative glyph. It requests the full atlas only after that probe passes, and it copies the supplied browser component instead of rebuilding the interaction.
 
+### OpenClaw
+
+Install the repository-level skill globally:
+
+```bash
+openclaw skills install git:neal-c611/letter-pop-skill@main --global
+```
+
+Start a new session and confirm it with `openclaw skills list`. OpenClaw follows the AgentSkills `SKILL.md` format and installs the supporting component and scripts with the repository.
+
+### Hermes Agent
+
+Install the packaged skill directory from GitHub:
+
+```bash
+hermes skills install neal-c611/letter-pop-skill/skills/letter-pop
+```
+
+Then start a new session or use `/reset`, and verify it with `hermes skills list`. Use this GitHub directory form rather than the Raw `SKILL.md` URL on Hermes versions that treat direct URLs as single-file skills.
+
 ### Download without Git
 
 Download the repository ZIP:
@@ -109,7 +129,10 @@ letter-pop-skill/
 │       └── example.js
 ├── scripts/
 │   ├── remove-solid-matte.sh
+│   ├── sync-hermes-package.sh
 │   └── validate-glyph-assets.sh
+├── skills/
+│   └── letter-pop/          # complete Hermes-installable package
 └── references/
     ├── artwork-generation.md
     └── implementation-pattern.md
