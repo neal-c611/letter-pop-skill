@@ -33,9 +33,10 @@ When alpha output is unavailable:
 
 1. Regenerate the glyph on a single flat, high-contrast matte color that does not occur in the glyph, such as `#00ff00` or `#ff00ff`.
 2. Explicitly request only the glyph: no transparency checkerboard, tile pattern, card, panel, rounded square, enclosing frame, border, floor, or background shadow.
-3. Run `scripts/remove-solid-matte.sh INPUT OUTPUT.png`. It samples the corner matte, removes the connected background with a soft color tolerance, and writes a true RGBA PNG. An optional third argument controls the ImageMagick fuzz percentage and defaults to `10`.
-4. Inspect the output against light and dark backgrounds. Adjust the fuzz value or regenerate with a cleaner matte if a colored fringe remains.
-5. Verify the output signature, alpha extrema, and visible bounds before integration.
+3. Run `scripts/remove-solid-matte.sh INPUT OUTPUT.png`. For a nearly flat matte, it samples and removes the connected corner background. An optional third argument controls the ImageMagick fuzz percentage and defaults to `10`.
+4. If the generator shifts the intended matte color or adds mild lighting variation, pass the intended prompt color as the fourth argument and use a higher tolerance, for example `scripts/remove-solid-matte.sh INPUT OUTPUT.png 35 '#00ff00'`. This removes matching matte colors throughout the image rather than only the connected corner.
+5. Inspect the output against light and dark backgrounds. Any visible rectangle, colored field, checkerboard, card, or frame means the asset failed and must not be integrated.
+6. Verify the output signature, alpha extrema, visible bounds, and alpha coverage before integration. With the required generous padding, an isolated glyph whose mean alpha exceeds `0.72` should fail as likely background residue.
 
 Do not use the matte remover on a generated checkerboard, gradient, scene, or enclosing frame. Those pixels cannot be separated reliably from translucent glyph materials; regenerate on a flat matte instead.
 

@@ -44,7 +44,7 @@ Segment text into grapheme clusters rather than code points. In JavaScript, pref
 
 If new artwork is needed, read [artwork generation](references/artwork-generation.md). If the user supplied final assets, preserve them and skip generation.
 
-Accept an asset as transparent only after checking its decoded alpha channel and file signature. A `.png` filename does not prove PNG encoding or transparency. When the generator cannot emit alpha, use the solid-matte fallback in the artwork reference; never accept a rendered checkerboard as transparency.
+Accept an asset as transparent only after checking its decoded alpha channel, alpha coverage, file signature, and composites over both light and dark backgrounds. A `.png` filename does not prove PNG encoding or transparency, and a few transparent border pixels do not prove the background was removed. When the generator cannot emit alpha, use the solid-matte fallback in the artwork reference; never accept a rendered checkerboard or visible matte rectangle as transparency.
 
 For a reference-driven Letter Pop effect, custom raster artwork is part of the requested result. Do not replace it with CSS gradients, SVG text using the original font outline, emoji, colored text, filters, or other placeholders and present that as complete. Use those only when the user explicitly asks for a code-only approximation. If raster generation and usable supplied assets are both unavailable, report the missing asset capability.
 
