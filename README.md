@@ -1,3 +1,7 @@
+<p align="right">
+  <strong>English</strong> · <a href="./README.zh-CN.md">简体中文</a>
+</p>
+
 # Letter Pop
 
 An agent skill for turning a specific text fragment on an existing webpage into a per-character image replacement interaction. Each grapheme keeps the original page typography at rest, then becomes custom artwork on hover, tap, or focus while neighboring text smoothly makes room.
