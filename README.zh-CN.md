@@ -6,7 +6,7 @@
 
 一个 Agent Skill，用于把现有网页中的指定文字变成逐字图片替换交互。默认状态保留网页原本的字体；鼠标悬停、触摸或键盘聚焦时，每个字形会变成独立的视觉对象，并让周围文字平滑腾出空间。
 
-这套工作流来自 OpenAI ChatGPT Images 2.5 发布页的交互形式，并已适配 React、Next.js、Vue、Svelte 和原生前端项目。
+这套工作流来自 [OpenAI ChatGPT Images 2.5 发布页](https://openai.com/index/introducing-chatgpt-images-2-5/)的交互形式，并已适配 React、Next.js、Vue、Svelte 和原生前端项目。
 
 在线 Demo 使用固定图片，以保证加载速度和效果一致。Skill 用于新的文字或项目时，默认会为本次任务重新生成素材。如果结果中有不满意的部分，可以保留已经认可的字形，只让 Agent 重新生成某个字、标点或整套视觉方向。
 
