@@ -24,6 +24,12 @@
 | --- | --- |
 | [![WorkBuddy 生成的 Letter Pop Demo](docs/previews/demo-workbuddy.png)](https://neal-c611.github.io/letter-pop-skill/#workbuddy) | [![豆包生成的 Letter Pop Demo](docs/previews/demo-doubao.png)](https://neal-c611.github.io/letter-pop-skill/#doubao) |
 
+### 每个字两张图
+
+[![每个字形带两张轮换图片的 Letter Pop Demo](docs/previews/demo-variants.png)](https://neal-c611.github.io/letter-pop-skill/#variants)
+
+这个 Demo 为 `大家好，我是Neal。` 的 11 个字符位置分别准备了两张不同艺术方向的透明 PNG，共 22 张。第一次 hover、触摸或键盘聚焦显示 A 图；该字符恢复原状后，下一次触发显示 B 图，随后循环。两组图片都提前生成并预加载，网页运行时不会调用生图模型。Skill 仍默认每个字符位置生成一张；需要这种效果时，可以指定整句话每字两张，也可以只给个别字符增加变体，以控制生图成本。
+
 ## 能做什么
 
 - 在现有代码中找到指定文字，只修改目标位置。

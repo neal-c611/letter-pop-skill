@@ -24,6 +24,12 @@ The same skill was also run in WorkBuddy and Doubao. These are their preserved g
 | --- | --- |
 | [![WorkBuddy-generated Letter Pop demo](docs/previews/demo-workbuddy.png)](https://neal-c611.github.io/letter-pop-skill/#workbuddy) | [![Doubao-generated Letter Pop demo](docs/previews/demo-doubao.png)](https://neal-c611.github.io/letter-pop-skill/#doubao) |
 
+### Two images per glyph
+
+[![Letter Pop demo with two artwork variants per glyph](docs/previews/demo-variants.png)](https://neal-c611.github.io/letter-pop-skill/#variants)
+
+This demo gives every one of the 11 character occurrences in `大家好，我是Neal。` two independently art-directed transparent PNGs: 22 files in total. The first hover, tap, or focus shows image A; after that character returns to rest, the next activation shows image B, then the cycle repeats. Both files are generated ahead of time and preloaded—the live page makes no image-generation calls. One image per occurrence remains the default when using the skill; ask for two variants for the whole phrase or only selected characters when you want this behavior.
+
 ## What it handles
 
 - Finds the requested text in an existing codebase and changes only that rendered occurrence.

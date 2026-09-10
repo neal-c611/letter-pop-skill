@@ -21,6 +21,7 @@ const tuning = [
 
 const workbuddyBase = "./assets/showcase/workbuddy/";
 const doubaoBase = "./assets/showcase/doubao/";
+const variantsBase = "./assets/showcase/variants/";
 
 const showcaseArtwork = {
   "workbuddy-stage": [
@@ -59,6 +60,19 @@ const showcaseArtwork = {
     { src: doubaoBase + "g10-a.png", rotation: 3 },
     { src: doubaoBase + "g11-l.png", rotation: -2 },
     { src: doubaoBase + "g12-period.png", rotation: 1, scale: 0.5, width: 0.68, height: 0.68, bottom: -0.01, spread: 0.02 },
+  ],
+  "variants-stage": [
+    { src: variantsBase + "g00-da-a.png", variants: [variantsBase + "g00-da-b.png"], rotation: -5 },
+    { src: variantsBase + "g01-jia-a.png", variants: [variantsBase + "g01-jia-b.png"], rotation: 4 },
+    { src: variantsBase + "g02-hao-a.png", variants: [variantsBase + "g02-hao-b.png"], rotation: -4 },
+    { src: variantsBase + "g03-comma-a.png", variants: [variantsBase + "g03-comma-b.png"], rotation: 7 },
+    { src: variantsBase + "g04-wo-a.png", variants: [variantsBase + "g04-wo-b.png"], rotation: 5 },
+    { src: variantsBase + "g05-shi-a.png", variants: [variantsBase + "g05-shi-b.png"], rotation: -5 },
+    { src: variantsBase + "g06-N-a.png", variants: [variantsBase + "g06-N-b.png"], rotation: 4 },
+    { src: variantsBase + "g07-e-a.png", variants: [variantsBase + "g07-e-b.png"], rotation: -5 },
+    { src: variantsBase + "g08-a-a.png", variants: [variantsBase + "g08-a-b.png"], rotation: 5 },
+    { src: variantsBase + "g09-l-a.png", variants: [variantsBase + "g09-l-b.png"], rotation: -4 },
+    { src: variantsBase + "g10-period-a.png", variants: [variantsBase + "g10-period-b.png"], rotation: 6 },
   ],
 };
 
@@ -105,8 +119,15 @@ Promise.all([...document.images].map((image) => image.decode?.().catch(() => und
     const activeIndices = preview === "compact"
       ? [0, 1, 2, 4, 5]
       : (preview === "workbuddy" ? [6] :
-        (preview === "doubao" ? [1] : [0, 2, 4, 5, 7, 8, 10]));
+        (preview === "doubao" ? [1] :
+          (preview === "variants" ? [0, 1, 2, 4, 5, 6, 8, 10] : [0, 2, 4, 5, 7, 8, 10])));
     activeIndices.forEach((index) => demo.activate(index));
+    if (preview === "variants") {
+      [1, 4, 6, 10].forEach((index) => {
+        demo.deactivate(index, 0);
+        window.setTimeout(() => demo.activate(index), 20);
+      });
+    }
   } else {
     window.setTimeout(() => demos.get("sans-stage")?.play(), 450);
   }

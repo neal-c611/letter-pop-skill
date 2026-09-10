@@ -270,6 +270,11 @@ a {
   background: #eadff2;
 }
 
+.demo-variants {
+  color: #251914;
+  background: #ead9c8;
+}
+
 .agent-kicker {
   margin: 0 0 24px;
   color: color-mix(in srgb, currentColor 54%, transparent);
@@ -297,6 +302,34 @@ a {
   font-family: Georgia, "Times New Roman", serif;
   font-size: 13px;
   line-height: 1.55;
+}
+
+.variants-heading {
+  width: min(1060px, 94vw);
+}
+
+.variant-cycle {
+  margin: 30px auto 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: color-mix(in srgb, currentColor 68%, transparent);
+  font-family: "Courier New", monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.variant-cycle b {
+  width: 22px;
+  height: 22px;
+  margin-right: 5px;
+  display: inline-grid;
+  place-items: center;
+  border: 1px solid currentColor;
+  border-radius: 50%;
 }
 
 footer {
@@ -383,6 +416,12 @@ footer {
 
   .agent-note {
     margin-top: 28px;
+  }
+
+  .variant-cycle {
+    max-width: 280px;
+    flex-wrap: wrap;
+    line-height: 1.8;
   }
 
   footer {

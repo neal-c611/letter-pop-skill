@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="Five interactive examples made with the Letter Pop agent skill, including artwork generated with WorkBuddy and Doubao."
+      content="Six interactive examples made with the Letter Pop agent skill, including artwork generated with WorkBuddy and Doubao and a two-image-per-glyph variant set."
     />
     <title>Letter Pop — Interactive demos</title>
     <link rel="stylesheet" href="./styles.css" />
@@ -23,6 +23,7 @@
         <a href="#compact">Compact</a>
         <a href="#workbuddy">WorkBuddy</a>
         <a href="#doubao">Doubao</a>
+        <a href="#variants">Variants</a>
         <a href="https://github.com/neal-c611/letter-pop-skill">GitHub ↗</a>
       </nav>
     </header>
@@ -118,6 +119,31 @@
           ></span>
         </h2>
         <p class="agent-note">Metal, moss, neon, paper, walnut, amber, glass, embroidery, and chocolate.</p>
+      </section>
+
+      <section id="variants" class="demo demo-agent demo-variants" aria-labelledby="variants-label">
+        <div class="demo-meta">
+          <p id="variants-label">Demo 06 / Two images per glyph</p>
+          <button type="button" data-play="variants-stage">Play next set</button>
+        </div>
+        <p class="agent-kicker">Eleven occurrences · twenty-two transparent PNGs</p>
+        <h2 class="agent-heading variants-heading">
+          <span
+            id="variants-stage"
+            class="letter-pop"
+            data-text="大家好，我是Neal。"
+            tabindex="0"
+            aria-label="大家好，我是Neal。"
+          ></span>
+        </h2>
+        <div class="variant-cycle" aria-label="Artwork cycle explanation">
+          <span><b>A</b> First activation</span>
+          <span aria-hidden="true">→</span>
+          <span><b>B</b> Second activation</span>
+          <span aria-hidden="true">→</span>
+          <span>Repeat</span>
+        </div>
+        <p class="agent-note">Each character position owns two different art directions. Leave it, then hover or tap it again to see the next fixed image; the browser does not generate images at runtime.</p>
       </section>
     </main>
 
